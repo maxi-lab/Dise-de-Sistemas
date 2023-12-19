@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main import views as m
+from ventas import views as v
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',m.menu),
+    path('altaVenta/',v.alta_venta,name='alta_venta'),
 ]
