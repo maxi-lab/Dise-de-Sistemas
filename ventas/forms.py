@@ -1,9 +1,13 @@
-from django.forms import ModelForm
+
 from django import forms
 from .models import Venta
-class VentaForm(ModelForm):
-    afiliado=forms.CharField(label='Afiliado',required=True)
+from django.utils.timezone import now
+class VentaForm(forms.ModelForm):
     class Meta:
         model=Venta
-        
-        fields=['CondicionDePago','fechaVencimiento','fechaEmision']
+        fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision']
+    fechaEmision=forms.CharField( widget=forms.TextInput(attrs={'readonly': True}))
+    def __init__(self,*args,**kwargs):
+        super(VentaForm,self).__init__(*args,**kwargs)
+        if not self.instance.pk:
+            self.initial['fechaEmision']=now()#a arreglar
