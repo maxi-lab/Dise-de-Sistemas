@@ -8,7 +8,7 @@ class Cobranza(models.Model):
     monto=models.FloatField()
 class Efectivo(models.Model):
     monto=models.FloatField()
-    CobranzaId=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
 
 class TipoTarjeta(models.TextChoices):
     CREDITO='C','credito'
@@ -19,14 +19,14 @@ class Tarjeta(models.Model):
     monto=models.FloatField()
     tipo=models.CharField(max_length=1,
                           choices=TipoTarjeta.choices)
-    CobranzaId=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
 class TranferenciaBancaria(models.Model):
     cbu=models.IntegerField()
     monto=models.FloatField()
     nroOperacion=models.IntegerField()
-    CobranzaId=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
 
 class VentaCobranza(models.Model):
     monto=models.FloatField()
-    CobranzaId=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
-    VentaId=models.ForeignKey(Venta,on_delete=models.CASCADE)
+    Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    Venta=models.ForeignKey(Venta,on_delete=models.CASCADE)

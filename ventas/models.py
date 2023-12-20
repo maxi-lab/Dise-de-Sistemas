@@ -31,13 +31,13 @@ class CondicionDePago(models.Model):
 class CondicionDePagoArticulo(models.Model):
     precio=models.FloatField()
     ArticuloId=models.ForeignKey(Articulo,on_delete=models.CASCADE)
-    CondicionDePagoId=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
+    CondicionDePago=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
 
 class VentaDetalle(models.Model):
     cantidad=models.IntegerField()
     precioArticulo=models.FloatField()
     subtotal=models.FloatField()
-    ArticuloId=models.ForeignKey(Articulo,on_delete=models.CASCADE)
+    Articulo=models.ForeignKey(Articulo,on_delete=models.CASCADE)
 
 class Venta (models.Model):
     fechaEmision=models.DateField(default=now())
@@ -46,9 +46,9 @@ class Venta (models.Model):
     importeTotal=models.FloatField()
     tipo=models.CharField(max_length=1,
                           choices=TipoComprobante.choices)
-    AfiliadoId=models.ForeignKey(Afiliado,on_delete=models.CASCADE)
-    CondicionDePagoId=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
-    VentaDetalleId=models.ForeignKey(VentaDetalle,on_delete=models.CASCADE)    
+    Afiliado=models.ForeignKey(Afiliado,on_delete=models.CASCADE)
+    CondicionDePago=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
+    VentaDetalle=models.ForeignKey(VentaDetalle,on_delete=models.CASCADE)    
 
 
 
