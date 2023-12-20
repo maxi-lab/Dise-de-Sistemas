@@ -12,7 +12,7 @@ class CondicionDePagoArticuloAdmin(admin.ModelAdmin):
 class AfiliadoAdmin(admin.ModelAdmin):
     pass
 class ArticuloAdmin(admin.ModelAdmin):
-    pass
+    pass    
 admin.site.register(v.Afiliado,AfiliadoAdmin)
 admin.site.register(v.Articulo,ArticuloAdmin)
 admin.site.register(v.VentaDetalle,VentaDetalleAdmin)

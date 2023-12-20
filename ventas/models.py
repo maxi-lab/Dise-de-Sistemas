@@ -10,8 +10,8 @@ class Afiliado(models.Model):
 
 
 class TipoCondicionDePago(models.TextChoices):
-    A_PAGAR='P','aPagar'
-    CONTADO='C','contado'
+    A_PAGAR='A Pagar','aPagar'
+    CONTADO='Contado','contado'
 
 class TipoComprobante(models.TextChoices):
     FACTURA_A='A','facturaA'
@@ -25,8 +25,10 @@ class Articulo(models.Model):
     stock=models.IntegerField()
 
 class CondicionDePago(models.Model):
-    tipo=models.CharField(max_length=1,
+    tipo=models.CharField(max_length=20,
                           choices=TipoCondicionDePago.choices)
+    def __str__(self):
+        return self.tipo
 
 class CondicionDePagoArticulo(models.Model):
     precio=models.FloatField()

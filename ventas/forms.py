@@ -8,10 +8,11 @@ class VentaForm(forms.ModelForm):
         fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision']
         widgets={
             'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
-            'fechaEmision': forms.DateInput(attrs={'type':'date'})
+            'fechaEmision': forms.DateInput(attrs={'type':'date',
+                                                   'readonly':True,}),
+            'Afiliado':forms.TextInput(attrs={'name':'afiliado'}),
         }
-    fechaEmision=forms.DateField(widget=forms.TextInput(attrs={'readonly': True}))
     def __init__(self,*args,**kwargs):
         super(VentaForm,self).__init__(*args,**kwargs)
         if not self.instance.pk:
-            self.initial['fechaEmision']=datetime.date(datetime.now())#a arreglar
+            self.initial['fechaEmision']=datetime.date(datetime.now())
