@@ -1,13 +1,17 @@
 
 from django import forms
 from .models import Venta
-from django.utils.timezone import now
+from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
         model=Venta
         fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision']
-    fechaEmision=forms.CharField( widget=forms.TextInput(attrs={'readonly': True}))
+        widgets={
+            'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
+            'fechaEmision': forms.DateInput(attrs={'type':'date'})
+        }
+    fechaEmision=forms.DateField(widget=forms.TextInput(attrs={'readonly': True}))
     def __init__(self,*args,**kwargs):
         super(VentaForm,self).__init__(*args,**kwargs)
         if not self.instance.pk:
-            self.initial['fechaEmision']=now()#a arreglar
+            self.initial['fechaEmision']=datetime.date(datetime.now())#a arreglar

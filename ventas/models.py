@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+from django.utils.timezone import datetime
 
 # Create your models here.
 class Afiliado(models.Model):
@@ -40,7 +40,7 @@ class VentaDetalle(models.Model):
     Articulo=models.ForeignKey(Articulo,on_delete=models.CASCADE)
 
 class Venta (models.Model):
-    fechaEmision=models.DateField(default=now())
+    fechaEmision=models.DateField(default=datetime.date(datetime.now()))
     fechaVencimiento=models.DateField()
     importeCancelado=models.FloatField(default=0)
     importeTotal=models.FloatField()
