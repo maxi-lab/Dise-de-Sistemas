@@ -21,5 +21,5 @@ class VentaDetalleForm(forms.ModelForm):
         model=VentaDetalle
         fields=['Articulo','cantidad']
         widgets={
-            'Articulo':forms.TextInput(attrs={'name':'articulo',}),
+            #'Articulo':forms.TextInput(attrs={'name':'articulo',}),
         }

@@ -6,6 +6,8 @@ class Afiliado(models.Model):
     cuit=models.IntegerField()
     fechaAfiliacion=models.DateField()
     nombre=models.CharField(max_length=20)
+    def __str__(self):
+        return self.nombre
 
 
 
@@ -23,6 +25,8 @@ class Articulo(models.Model):
     codigo=models.CharField(max_length=20)
     nombre=models.CharField(max_length=20)
     stock=models.IntegerField()
+    def __str__(self):
+        return self.nombre
 
 class CondicionDePago(models.Model):
     tipo=models.CharField(max_length=20,
@@ -34,13 +38,6 @@ class CondicionDePagoArticulo(models.Model):
     precio=models.FloatField()
     ArticuloId=models.ForeignKey(Articulo,on_delete=models.CASCADE)
     CondicionDePago=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
-
-class VentaDetalle(models.Model):
-    cantidad=models.IntegerField()
-    precioArticulo=models.FloatField()
-    subtotal=models.FloatField()
-    Articulo=models.ForeignKey(Articulo,on_delete=models.CASCADE)
-
 class Venta (models.Model):
     fechaEmision=models.DateField(default=datetime.date(datetime.now()))
     fechaVencimiento=models.DateField()
@@ -50,7 +47,16 @@ class Venta (models.Model):
                           choices=TipoComprobante.choices)
     Afiliado=models.ForeignKey(Afiliado,on_delete=models.CASCADE)
     CondicionDePago=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
-    VentaDetalle=models.ForeignKey(VentaDetalle,on_delete=models.CASCADE)    
+
+class VentaDetalle(models.Model):
+    cantidad=models.IntegerField()
+    precioArticulo=models.FloatField()
+    subtotal=models.FloatField()
+    Articulo=models.ForeignKey(Articulo,on_delete=models.CASCADE)
+    Venta=models.ForeignKey(Venta,on_delete=models.CASCADE)   
+     
+
+    
 
 
 

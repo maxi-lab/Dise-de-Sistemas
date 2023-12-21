@@ -18,12 +18,17 @@ def alta_venta(request):
             'formVentaDetalle':VentaDetalleForm,
             'error':'algo fue mal'
         })
-    if 'submit_venta_detalle'in request.POST:
+    if 'submit_venta_detalle'in request.POST:  
         try:
-            form=VentaDetalleForm(request.POST)
-            nuevoDetalla=form.save(commit=False)
-            nuevoDetalla.save()
+            #print('req')
+            #print(request.POST)
+            formD=VentaDetalleForm(request.POST)
+            nuevoDetalle=formD.save(commit=False)
+            #print('obj')
+            #print(nuevoDetalle)
+            
         except:
+            
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
