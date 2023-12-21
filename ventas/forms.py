@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Venta
+from .models import Venta,VentaDetalle
 from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
@@ -16,3 +16,10 @@ class VentaForm(forms.ModelForm):
         super(VentaForm,self).__init__(*args,**kwargs)
         if not self.instance.pk:
             self.initial['fechaEmision']=datetime.date(datetime.now())
+class VentaDetalleForm(forms.ModelForm):
+    class Meta:
+        model=VentaDetalle
+        fields=['Articulo','cantidad']
+        widgets={
+            'Articulo':forms.TextInput(attrs={'name':'articulo',}),
+        }
