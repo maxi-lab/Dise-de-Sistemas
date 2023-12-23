@@ -1,6 +1,7 @@
 
+from typing import Any
 from django import forms
-from .models import Venta,VentaDetalle
+from .models import Venta,VentaDetalle, Afiliado
 from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
@@ -10,8 +11,17 @@ class VentaForm(forms.ModelForm):
             'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
             'fechaEmision': forms.DateInput(attrs={'type':'date',
                                                    'readonly':True,}),
-            'Afiliado':forms.TextInput(attrs={'name':'afiliado'}),
+            #'Afiliado':forms.TextInput(attrs={'name':'afiliado'}),
         }
+    Afiliado = forms.CharField(widget=forms.TextInput(attrs={'name': 'afiliado'}))
+    def clean_Afiliado(self):
+        afiliadoNombre=self.cleaned_data.get('Afiliado')
+        try:
+            afiliado=Afiliado.objects.get(nombre=afiliadoNombre)
+            return afiliado
+        except Afiliado.DoesNotExist:
+            raise forms.ValidationError('e')
+        
     def __init__(self,*args,**kwargs):
         super(VentaForm,self).__init__(*args,**kwargs)
         if not self.instance.pk:

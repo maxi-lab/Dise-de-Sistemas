@@ -42,7 +42,7 @@ class Venta (models.Model):
     fechaEmision=models.DateField(default=datetime.date(datetime.now()))
     fechaVencimiento=models.DateField()
     importeCancelado=models.FloatField(default=0)
-    importeTotal=models.FloatField()
+    importeTotal=models.FloatField(default=0)
     tipo=models.CharField(max_length=1,
                           choices=TipoComprobante.choices)
     Afiliado=models.ForeignKey(Afiliado,on_delete=models.CASCADE)
