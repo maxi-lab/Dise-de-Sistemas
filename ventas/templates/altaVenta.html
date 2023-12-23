@@ -8,3 +8,8 @@
 <form action="{% url 'menu' %}">
     <button>Cancelar</button>
 </form>
+<form action="" method="post">
+    {% csrf_token %}
+    {{formVentaDetalle}}
+    <button type="submit" name="submit_venta_detalle">+</button>
+</form>
