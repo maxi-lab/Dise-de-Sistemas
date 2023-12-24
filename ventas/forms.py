@@ -6,12 +6,12 @@ from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
         model=Venta
-        fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision']
+        fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision',]
         widgets={
             'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
             'fechaEmision': forms.DateInput(attrs={'type':'date',
                                                    'readonly':True,}),
-            #'Afiliado':forms.TextInput(attrs={'name':'afiliado'}),
+            
         }
     Afiliado = forms.CharField(widget=forms.TextInput(attrs={'name': 'afiliado'}))
     def clean_Afiliado(self):
@@ -29,7 +29,8 @@ class VentaForm(forms.ModelForm):
 class VentaDetalleForm(forms.ModelForm):
     class Meta:
         model=VentaDetalle
-        fields=['Articulo','cantidad']
+        fields=['Articulo','cantidad','Venta']
         widgets={
             #'Articulo':forms.TextInput(attrs={'name':'articulo',}),
+            #'Venta':forms.HiddenInput()
         }

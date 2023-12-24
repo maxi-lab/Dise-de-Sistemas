@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse
 from .forms import VentaForm,VentaDetalleForm
-from .models import VentaDetalle
+from .models import VentaDetalle, Venta
 from django.db import transaction
 # Create your views here.
 @transaction.atomic
@@ -27,16 +27,25 @@ def alta_venta(request):
             'error':'algo fue mal'
         })
     if 'submit_venta_detalle' in request.POST:
-        formDetalle=VentaDetalleForm(request.POST)
-        nuevoDetalle=formDetalle.save(commit=False)
-        nuevoDetalle.precioArticulo=1
-        nuevoDetalle.subtotal=nuevoDetalle.cantidad
-        nuevoDetalle.save()
-        try:
-            pass
-        except:
+        #formVenta=VentaForm(request.POST)
+        formularioVentaDetalle=VentaDetalleForm(request.POST)
+        
+        if formularioVentaDetalle.is_valid():
+            #venta=formVenta.save(commit=False)
+            #formularioVentaDetalle.Venta=venta
+            ventaDetalle=formularioVentaDetalle.save(commit=False)
+            ventaDetalle.precioArticulo=1
+            ventaDetalle.subtotal=ventaDetalle.cantidad
+           # ventaDetalle.Venta=venta
+            ventaDetalle.save()
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':'algo fue mal en detalle'})
+            'error':'algo fue bien'
+        })
+        else:
+            return render(request,'altaVenta.html',{
+            'formVenta':VentaForm,
+            'formVentaDetalle':VentaDetalleForm,
+            'error':formularioVentaDetalle.errors})
 

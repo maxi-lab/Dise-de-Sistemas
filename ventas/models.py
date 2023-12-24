@@ -40,7 +40,7 @@ class CondicionDePagoArticulo(models.Model):
     CondicionDePago=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
 class Venta (models.Model):
     fechaEmision=models.DateField(default=datetime.date(datetime.now()))
-    fechaVencimiento=models.DateField()
+    fechaVencimiento=models.DateField(default=datetime.date(datetime.now()))
     importeCancelado=models.FloatField(default=0)
     importeTotal=models.FloatField(default=0)
     tipo=models.CharField(max_length=1,
