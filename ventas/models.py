@@ -27,6 +27,13 @@ class Articulo(models.Model):
     stock=models.IntegerField()
     def __str__(self):
         return self.nombre
+    def to_jason(self):
+        return{
+            'id':self.id,
+            'nombre':self.nombre,
+            'codigo':self.codigo,
+            'stock':self.stock,
+        }
 
 class CondicionDePago(models.Model):
     tipo=models.CharField(max_length=20,

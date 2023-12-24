@@ -29,8 +29,8 @@ class VentaForm(forms.ModelForm):
 class VentaDetalleForm(forms.ModelForm):
     class Meta:
         model=VentaDetalle
-        fields=['Articulo','cantidad','Venta']
+        fields=['Articulo','cantidad',]
         widgets={
             #'Articulo':forms.TextInput(attrs={'name':'articulo',}),
-            #'Venta':forms.HiddenInput()
+            
         }
