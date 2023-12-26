@@ -13,31 +13,31 @@ def alta_venta(request):
         }) 
     
     if 'submit_venta' in request.POST:
-        form=VentaForm(request.POST)
-        nuevaVenta=form.save(commit=False)    
-        nuevaVenta.save()
-        for i in ventaDetalles:
-            artId=i['Articulo']
-            print(artId)
-            articulo=Articulo.objects.get(pk=artId)
-            detalle=VentaDetalle.objects.create(
-                Venta=nuevaVenta,
-                cantidad=i['cantidad'],
-                precioArticulo=i['precioArticulo'],
-                subtotal=i['subtotal'],
-                Articulo=articulo 
-            )
-            print('creado')
-            detalle.save()
-            
-        ventaDetalles=[]
+        
         try:
-            
+            form=VentaForm(request.POST)
+            nuevaVenta=form.save(commit=False)    
+            nuevaVenta.save()
+            for i in ventaDetalles:
+                artId=i['Articulo']
+                print(artId)
+                articulo=Articulo.objects.get(pk=artId)
+                detalle=VentaDetalle.objects.create(
+                    Venta=nuevaVenta,
+                    cantidad=i['cantidad'],
+                    precioArticulo=i['precioArticulo'],
+                    subtotal=i['subtotal'],
+                    Articulo=articulo 
+                )
+                detalle.save()
+                nuevaVenta.importeTotal=nuevaVenta.importeTotal+detalle.subtotal
+                nuevaVenta.save()   
+            ventaDetalles=[]
             request.session['ventaDetalles']=ventaDetalles
             return render(request,'altaVenta.html',{
-            'formVenta':VentaForm,
-            'formVentaDetalle':VentaDetalleForm,
-        })
+                'formVenta':VentaForm,
+                'formVentaDetalle':VentaDetalleForm,
+            })
         except: 
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
