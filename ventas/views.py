@@ -13,14 +13,12 @@ def alta_venta(request):
         }) 
     
     if 'submit_venta' in request.POST:
-        
         try:
             form=VentaForm(request.POST)
             nuevaVenta=form.save(commit=False)    
             nuevaVenta.save()
             for i in ventaDetalles:
                 artId=i['Articulo']
-                print(artId)
                 articulo=Articulo.objects.get(pk=artId)
                 detalle=VentaDetalle.objects.create(
                     Venta=nuevaVenta,
@@ -63,7 +61,7 @@ def alta_venta(request):
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':ventaDetalles
+            'error':'Detalle cargado exitosamente'
         })
         else:
             return render(request,'altaVenta.html',{
