@@ -61,7 +61,8 @@ def alta_venta(request):
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':'Detalle cargado exitosamente'
+            'error':'Detalle cargado exitosamente',
+            'detalles':ventaDetalles,
         })
         else:
             return render(request,'altaVenta.html',{

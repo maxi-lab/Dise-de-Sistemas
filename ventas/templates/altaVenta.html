@@ -13,3 +13,19 @@
     {{formVentaDetalle}}
     <button type="submit" name="submit_venta_detalle">+</button>
 </form>
+<table>
+    <tr>
+        <th>Articulo</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th></th>
+    </tr>
+    {% for i in detalles %}
+    <tr>
+        <td>{{i.Articulo}}</td>
+        <td>{{i.cantidad}}</td>
+        <td>{{i.subtotal}}</td>
+        <td>D</td>
+    </tr>
+    {% endfor %}
+</table>
