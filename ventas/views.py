@@ -13,11 +13,26 @@ def alta_venta(request):
         }) 
     
     if 'submit_venta' in request.POST:
+        form=VentaForm(request.POST)
+        nuevaVenta=form.save(commit=False)    
+        nuevaVenta.save()
+        for i in ventaDetalles:
+            artId=i['Articulo']
+            print(artId)
+            articulo=Articulo.objects.get(pk=artId)
+            detalle=VentaDetalle.objects.create(
+                Venta=nuevaVenta,
+                cantidad=i['cantidad'],
+                precioArticulo=i['precioArticulo'],
+                subtotal=i['subtotal'],
+                Articulo=articulo 
+            )
+            print('creado')
+            detalle.save()
+            
+        ventaDetalles=[]
         try:
-            form=VentaForm(request.POST)
-            nuevaVenta=form.save(commit=False)    
-            nuevaVenta.save()
-            ventaDetalles=[]
+            
             request.session['ventaDetalles']=ventaDetalles
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
@@ -30,27 +45,19 @@ def alta_venta(request):
             'error':'algo fue mal'
         })
     if 'submit_venta_detalle' in request.POST:
-        formVenta=VentaForm(request.POST)
-        formularioVentaDetalle=VentaDetalleForm(request.POST)
         
+        formularioVentaDetalle=VentaDetalleForm(request.POST)
         if formularioVentaDetalle.is_valid():
-            
-            #formularioVentaDetalle.Venta=venta
             ventaDetalle=formularioVentaDetalle.save(commit=False)
-            
             artId=ventaDetalle.Articulo.id
             condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
             ventaDetalle.precioArticulo=condPago.get().precio
             ventaDetalle.subtotal=ventaDetalle.cantidad*ventaDetalle.precioArticulo
-            artJason=ventaDetalle.Articulo.to_jason()
-            #venta=formVenta.save(commit=False)
-            #ventaDetalle.Venta=venta
-            #ventaDetalle.save()
             ventaDetalles.append({
                 'cantidad':ventaDetalle.cantidad,
                 'precioArticulo':ventaDetalle.precioArticulo,
                 'subtotal':ventaDetalle.subtotal,
-                'Articulo':artJason,
+                'Articulo':ventaDetalle.Articulo.id,
             })
             request.session['ventaDetalles']=ventaDetalles
             return render(request,'altaVenta.html',{
