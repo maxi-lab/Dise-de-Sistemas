@@ -6,7 +6,7 @@ from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
         model=Venta
-        fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision',]
+        fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision','tipo']
         widgets={
             'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
             'fechaEmision': forms.DateInput(attrs={'type':'date',

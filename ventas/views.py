@@ -1,4 +1,4 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render
 from .forms import VentaForm,VentaDetalleForm
 from .models import VentaDetalle, Venta, Articulo, CondicionDePago, CondicionDePagoArticulo
 from django.db import transaction
@@ -7,6 +7,8 @@ from django.db import transaction
 def alta_venta(request):
     ventaDetalles=request.session.get('ventaDetalles',[])
     if request.method=='GET':
+        ventaDetalles=[]
+        request.session['ventaDetalles']=ventaDetalles
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
@@ -19,7 +21,7 @@ def alta_venta(request):
             nuevaVenta.save()
             for i in ventaDetalles:
                 artId=i['Articulo']
-                articulo=Articulo.objects.get(pk=artId)
+                articulo=rec_art(artId)
                 detalle=VentaDetalle.objects.create(
                     Venta=nuevaVenta,
                     cantidad=i['cantidad'],
@@ -40,7 +42,9 @@ def alta_venta(request):
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':'algo fue mal'
+            'error':'algo fue mal',
+            'detalles':ventaDetalles,
+         
         })
     if 'submit_venta_detalle' in request.POST:
         
@@ -55,7 +59,7 @@ def alta_venta(request):
                 'cantidad':ventaDetalle.cantidad,
                 'precioArticulo':ventaDetalle.precioArticulo,
                 'subtotal':ventaDetalle.subtotal,
-                'Articulo':ventaDetalle.Articulo.id,
+                'Articulo':artId,
             })
             request.session['ventaDetalles']=ventaDetalles
             return render(request,'altaVenta.html',{
@@ -63,10 +67,14 @@ def alta_venta(request):
             'formVentaDetalle':VentaDetalleForm,
             'error':'Detalle cargado exitosamente',
             'detalles':ventaDetalles,
+            
         })
         else:
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':formularioVentaDetalle.errors})
-
+            'error':formularioVentaDetalle.errors,
+            'detalles':ventaDetalles,
+            })
+def rec_art(id):
+    return Articulo.objects.get(pk=id)
