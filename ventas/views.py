@@ -15,68 +15,72 @@ def alta_venta(request):
         }) 
     
     if 'submit_venta' in request.POST:
-        try:
-            form=VentaForm(request.POST)
-            nuevaVenta=form.save(commit=False)    
-            nuevaVenta.save()
-            for i in ventaDetalles:
-                art=i['Articulo']
-                artId=art['id']
-                articulo=rec_art(artId)
-                detalle=VentaDetalle.objects.create(
-                    Venta=nuevaVenta,
-                    cantidad=i['cantidad'],
-                    precioArticulo=i['precioArticulo'],
-                    subtotal=i['subtotal'],
-                    Articulo=articulo 
-                )
-                detalle.save()
-                nuevaVenta.importeTotal=nuevaVenta.importeTotal+detalle.subtotal
-                nuevaVenta.save()   
-            ventaDetalles=[]
-            request.session['ventaDetalles']=ventaDetalles
-            return render(request,'altaVenta.html',{
-                'formVenta':VentaForm,
-                'formVentaDetalle':VentaDetalleForm,
+        return venta(request,ventaDetalles)
+    if 'submit_venta_detalle' in request.POST:
+        return venta_detalle(request,ventaDetalles)
+
+def rec_art(id):
+    return Articulo.objects.get(pk=id)
+
+def venta(request,ventaDetalles):
+    try:
+        form=VentaForm(request.POST)
+        nuevaVenta=form.save(commit=False)    
+        nuevaVenta.save()
+        for i in ventaDetalles:
+            art=i['Articulo']
+            artId=art['id']
+            articulo=rec_art(artId)
+            detalle=VentaDetalle.objects.create(
+                Venta=nuevaVenta,
+                cantidad=i['cantidad'],
+                precioArticulo=i['precioArticulo'],
+                subtotal=i['subtotal'],
+                Articulo=articulo 
+            )
+            detalle.save()
+            nuevaVenta.importeTotal=nuevaVenta.importeTotal+detalle.subtotal
+            nuevaVenta.save()   
+        ventaDetalles=[]
+        request.session['ventaDetalles']=ventaDetalles
+        return render(request,'altaVenta.html',{
+            'formVenta':VentaForm,
+            'formVentaDetalle':VentaDetalleForm,
             })
-        except: 
-            return render(request,'altaVenta.html',{
+    except: 
+        return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
             'error':'algo fue mal',
             'detalles':ventaDetalles,
-         
         })
-    if 'submit_venta_detalle' in request.POST:
-        
-        formularioVentaDetalle=VentaDetalleForm(request.POST)
-        if formularioVentaDetalle.is_valid():
-            ventaDetalle=formularioVentaDetalle.save(commit=False)
-            artId=ventaDetalle.Articulo.id
-            condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
-            ventaDetalle.precioArticulo=condPago.get().precio
-            ventaDetalle.subtotal=ventaDetalle.cantidad*ventaDetalle.precioArticulo
-            ventaDetalles.append({
-                'cantidad':ventaDetalle.cantidad,
-                'precioArticulo':ventaDetalle.precioArticulo,
-                'subtotal':ventaDetalle.subtotal,
-                'Articulo':Articulo.to_jason(ventaDetalle.Articulo),
-                'nom':ventaDetalle.Articulo.nombre
+
+def venta_detalle(request,ventaDetalles):
+    formularioVentaDetalle=VentaDetalleForm(request.POST)
+    if formularioVentaDetalle.is_valid():
+        ventaDetalle=formularioVentaDetalle.save(commit=False)
+        artId=ventaDetalle.Articulo.id
+        condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
+        ventaDetalle.precioArticulo=condPago.get().precio
+        ventaDetalle.subtotal=ventaDetalle.cantidad*ventaDetalle.precioArticulo
+        ventaDetalles.append({
+            'cantidad':ventaDetalle.cantidad,
+            'precioArticulo':ventaDetalle.precioArticulo,
+            'subtotal':ventaDetalle.subtotal,
+            'Articulo':Articulo.to_jason(ventaDetalle.Articulo),
+            'nom':ventaDetalle.Articulo.nombre
             })
-            request.session['ventaDetalles']=ventaDetalles
-            return render(request,'altaVenta.html',{
+        request.session['ventaDetalles']=ventaDetalles
+        return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
             'error':'Detalle cargado exitosamente',
             'detalles':ventaDetalles,
-            
         })
-        else:
-            return render(request,'altaVenta.html',{
-            'formVenta':VentaForm,
-            'formVentaDetalle':VentaDetalleForm,
-            'error':formularioVentaDetalle.errors,
-            'detalles':ventaDetalles,
-            })
-def rec_art(id):
-    return Articulo.objects.get(pk=id)
+    else:
+        return render(request,'altaVenta.html',{
+        'formVenta':VentaForm,
+        'formVentaDetalle':VentaDetalleForm,
+        'error':formularioVentaDetalle.errors,
+        'detalles':ventaDetalles,
+        })
