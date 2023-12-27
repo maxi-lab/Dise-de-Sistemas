@@ -70,12 +70,16 @@ def venta_detalle(request,ventaDetalles):
             'Articulo':Articulo.to_jason(ventaDetalle.Articulo),
             'nom':ventaDetalle.Articulo.nombre
             })
+        total=0
+        for i in ventaDetalles:
+            total=total+i['subtotal']
         request.session['ventaDetalles']=ventaDetalles
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
             'error':'Detalle cargado exitosamente',
             'detalles':ventaDetalles,
+            'total':total,
         })
     else:
         return render(request,'altaVenta.html',{
