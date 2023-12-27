@@ -20,7 +20,8 @@ def alta_venta(request):
             nuevaVenta=form.save(commit=False)    
             nuevaVenta.save()
             for i in ventaDetalles:
-                artId=i['Articulo']
+                art=i['Articulo']
+                artId=art['id']
                 articulo=rec_art(artId)
                 detalle=VentaDetalle.objects.create(
                     Venta=nuevaVenta,
@@ -59,7 +60,8 @@ def alta_venta(request):
                 'cantidad':ventaDetalle.cantidad,
                 'precioArticulo':ventaDetalle.precioArticulo,
                 'subtotal':ventaDetalle.subtotal,
-                'Articulo':artId,
+                'Articulo':Articulo.to_jason(ventaDetalle.Articulo),
+                'nom':ventaDetalle.Articulo.nombre
             })
             request.session['ventaDetalles']=ventaDetalles
             return render(request,'altaVenta.html',{
