@@ -1,7 +1,6 @@
 
-from typing import Any
 from django import forms
-from .models import Venta,VentaDetalle, Afiliado
+from .models import Venta,VentaDetalle, Afiliado, Articulo
 from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
@@ -30,7 +29,11 @@ class VentaDetalleForm(forms.ModelForm):
     class Meta:
         model=VentaDetalle
         fields=['Articulo','cantidad',]
-        widgets={
-            #'Articulo':forms.TextInput(attrs={'name':'articulo',}),
-            
-        }
+    Articulo=forms.CharField()
+    def clean_Articulo(self):
+        articuloNombre=self.cleaned_data.get('Articulo')
+        try:
+            arti=Articulo.objects.get(nombre=articuloNombre)
+            return arti
+        except Articulo.DoesNotExist:
+            raise forms.ValidationError('e')
