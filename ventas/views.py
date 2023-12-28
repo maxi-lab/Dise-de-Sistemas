@@ -57,8 +57,9 @@ def venta(request,ventaDetalles):
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':'algo fue mal',
+            'error':'El afiliado no fue encontrado',
             'detalles':ventaDetalles,
+            'total':total_actual(ventaDetalles)
         })
 
 def venta_detalle(request,ventaDetalles): 
@@ -77,25 +78,30 @@ def venta_detalle(request,ventaDetalles):
             'nom':ventaDetalle.Articulo.nombre,
             'n':len(ventaDetalles)+1,
             })
-        total=0
-        for i in ventaDetalles:
-            total=total+i['subtotal']
+        
         request.session['ventaDetalles']=ventaDetalles
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
             'error':'Detalle cargado exitosamente',
             'detalles':ventaDetalles,
-            'total':total,
+            'total':total_actual(ventaDetalles),
         })
     else:
         return render(request,'altaVenta.html',{
         'formVenta':VentaForm,
         'formVentaDetalle':VentaDetalleForm,
-        'error':formularioVentaDetalle.errors,
+        'error':'El articulo no fue encontrado',
         'detalles':ventaDetalles,
+        'total':total_actual(ventaDetalles),
         })
-    
+
+def total_actual(ventaDetalles):
+    t=0
+    for i in ventaDetalles:
+        t=t+i['subtotal']
+    return t  
+
 def eliminar_detalle(request,ventaDetalles,nro):
     det=None
     for i in ventaDetalles:
@@ -103,14 +109,11 @@ def eliminar_detalle(request,ventaDetalles,nro):
             det=i#si coincide la guardo
     ventaDetalles.remove(det)
     request.session['ventaDetalles']=ventaDetalles
-    total=0
-    for i in ventaDetalles:
-        total=total+i['subtotal']
     request.session['ventaDetalles']=ventaDetalles
     return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
             'error':'Detalle cargado exitosamente',
             'detalles':ventaDetalles,
-            'total':total,
+            'total':total_actual(ventaDetalles),
     })
