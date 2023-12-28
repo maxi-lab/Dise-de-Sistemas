@@ -25,7 +25,10 @@
         <td>{{i.nom}}</td>
         <td>{{i.cantidad}}</td>
         <td>{{i.subtotal}}</td>
-        <td>D</td>
+        <td><form action="" method="post">
+            {% csrf_token %}
+            <button type="submit" name="det_{{i.n}}">D</button>
+        </form></td>
     </tr>
     {% endfor %}
     

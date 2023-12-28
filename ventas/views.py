@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .forms import VentaForm,VentaDetalleForm
-from .models import VentaDetalle, Venta, Articulo, CondicionDePago, CondicionDePagoArticulo
+from .models import VentaDetalle, Articulo, CondicionDePagoArticulo
 from django.db import transaction
+import re
 # Create your views here.
 @transaction.atomic
 def alta_venta(request):
@@ -15,9 +16,14 @@ def alta_venta(request):
         }) 
     
     if 'submit_venta' in request.POST:
+        print(request.POST)
         return venta(request,ventaDetalles)
     if 'submit_venta_detalle' in request.POST:
+        print(request.POST)
         return venta_detalle(request,ventaDetalles)
+    patron=re.compile(r'det_(\d+)')#patron para buscar en los submits
+    if patron.findall(str(request.POST)):
+        return eliminar_detalle(request,ventaDetalles,patron.findall(str(request.POST)))
 
 def rec_art(id):
     return Articulo.objects.get(pk=id)
@@ -55,7 +61,7 @@ def venta(request,ventaDetalles):
             'detalles':ventaDetalles,
         })
 
-def venta_detalle(request,ventaDetalles):
+def venta_detalle(request,ventaDetalles): 
     formularioVentaDetalle=VentaDetalleForm(request.POST)
     if formularioVentaDetalle.is_valid():
         ventaDetalle=formularioVentaDetalle.save(commit=False)
@@ -68,7 +74,8 @@ def venta_detalle(request,ventaDetalles):
             'precioArticulo':ventaDetalle.precioArticulo,
             'subtotal':ventaDetalle.subtotal,
             'Articulo':Articulo.to_jason(ventaDetalle.Articulo),
-            'nom':ventaDetalle.Articulo.nombre
+            'nom':ventaDetalle.Articulo.nombre,
+            'n':len(ventaDetalles)+1,
             })
         total=0
         for i in ventaDetalles:
@@ -88,3 +95,22 @@ def venta_detalle(request,ventaDetalles):
         'error':formularioVentaDetalle.errors,
         'detalles':ventaDetalles,
         })
+    
+def eliminar_detalle(request,ventaDetalles,nro):
+    det=None
+    for i in ventaDetalles:
+        if i['n']==int(nro[0]):
+            det=i#si coincide la guardo
+    ventaDetalles.remove(det)
+    request.session['ventaDetalles']=ventaDetalles
+    total=0
+    for i in ventaDetalles:
+        total=total+i['subtotal']
+    request.session['ventaDetalles']=ventaDetalles
+    return render(request,'altaVenta.html',{
+            'formVenta':VentaForm,
+            'formVentaDetalle':VentaDetalleForm,
+            'error':'Detalle cargado exitosamente',
+            'detalles':ventaDetalles,
+            'total':total,
+    })
