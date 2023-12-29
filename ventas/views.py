@@ -83,7 +83,7 @@ def venta_detalle(request,ventaDetalles):
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':'Detalle cargado exitosamente',
+            'aviso':'Detalle cargado exitosamente',
             'detalles':ventaDetalles,
             'total':total_actual(ventaDetalles),
         })
@@ -113,7 +113,7 @@ def eliminar_detalle(request,ventaDetalles,nro):
     return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
-            'error':'Detalle cargado exitosamente',
+            'aviso':'Detalle eliminado exitosamente',
             'detalles':ventaDetalles,
             'total':total_actual(ventaDetalles),
     })
