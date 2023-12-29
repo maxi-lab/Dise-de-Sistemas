@@ -1,4 +1,5 @@
 
+from typing import Any
 from django import forms
 from .models import Venta,VentaDetalle, Afiliado, Articulo
 from django.utils.timezone import datetime

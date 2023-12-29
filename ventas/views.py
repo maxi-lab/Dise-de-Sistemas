@@ -66,6 +66,14 @@ def venta_detalle(request,ventaDetalles):
     formularioVentaDetalle=VentaDetalleForm(request.POST)
     if formularioVentaDetalle.is_valid():
         ventaDetalle=formularioVentaDetalle.save(commit=False)
+        if ventaDetalle.cantidad<=0:
+            return render(request,'altaVenta.html',{
+        'formVenta':VentaForm,
+        'formVentaDetalle':VentaDetalleForm,
+        'error':'Cantidad invalida',
+        'detalles':ventaDetalles,
+        'total':total_actual(ventaDetalles),
+        })
         artId=ventaDetalle.Articulo.id
         condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
         ventaDetalle.precioArticulo=condPago.get().precio
