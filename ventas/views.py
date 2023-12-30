@@ -16,10 +16,8 @@ def alta_venta(request):
         }) 
     
     if 'submit_venta' in request.POST:
-        print(request.POST)
         return venta(request,ventaDetalles)
     if 'submit_venta_detalle' in request.POST:
-        print(request.POST)
         return venta_detalle(request,ventaDetalles)
     patron=re.compile(r'det_(\d+)')#patron para buscar en los submits
     if patron.findall(str(request.POST)):
