@@ -19,10 +19,13 @@ from django.urls import path
 from main import views as m
 from ventas import views as v
 from cobranzas import views as c
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',m.menu,name='menu'),
     path('altaVenta/',v.alta_venta,name='alta_venta'),
     path('altaCobranza/',c.alta_cobranza,name='alta_cobranza'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
