@@ -1,5 +1,3 @@
-
-from typing import Any
 from django import forms
 from .models import Venta,VentaDetalle, Afiliado, Articulo
 from django.utils.timezone import datetime
@@ -10,8 +8,7 @@ class VentaForm(forms.ModelForm):
         widgets={
             'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
             'fechaEmision': forms.DateInput(attrs={'type':'date',
-                                                   'readonly':True,}),
-            
+                                                   'readonly':True,}), 
         }
     Afiliado = forms.CharField(widget=forms.TextInput(attrs={'name': 'afiliado'}))
     def clean_Afiliado(self):

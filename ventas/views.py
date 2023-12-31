@@ -76,7 +76,7 @@ def venta_detalle(request,ventaDetalles):
         condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
         ventaDetalle.precioArticulo=condPago.get().precio
         ventaDetalle.subtotal=ventaDetalle.cantidad*ventaDetalle.precioArticulo
-        ventaDetalles.append({
+        agregado_inteligente(ventaDetalles,{
             'cantidad':ventaDetalle.cantidad,
             'precioArticulo':ventaDetalle.precioArticulo,
             'subtotal':ventaDetalle.subtotal,
@@ -84,7 +84,6 @@ def venta_detalle(request,ventaDetalles):
             'nom':ventaDetalle.Articulo.nombre,
             'n':len(ventaDetalles)+1,
             })
-        
         request.session['ventaDetalles']=ventaDetalles
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
@@ -123,3 +122,13 @@ def eliminar_detalle(request,ventaDetalles,nro):
             'detalles':ventaDetalles,
             'total':total_actual(ventaDetalles),
     })
+
+def agregado_inteligente(ventaDetalles,detalle):
+    for i in ventaDetalles:
+        if i['Articulo']==detalle['Articulo']:
+            print('son iguales')
+            i['cantidad']=i['cantidad']+detalle['cantidad']
+            i['subtotal']=i['subtotal']+detalle['subtotal']
+            return
+    ventaDetalles.append(detalle)
+    return
