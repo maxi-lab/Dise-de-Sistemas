@@ -27,9 +27,12 @@ def rec_art(id):
     return Articulo.objects.get(pk=id)
 
 def venta(request,ventaDetalles):
+    form=VentaForm(request.POST)
+    print(form.cleaned_emision()) 
     try:
         form=VentaForm(request.POST)
-        nuevaVenta=form.save(commit=False)    
+        print(form.cleaned_emision() ) 
+        nuevaVenta=form.save(commit=False)  
         nuevaVenta.save()
         for i in ventaDetalles:
             art=i['Articulo']

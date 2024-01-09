@@ -7,8 +7,7 @@ class VentaForm(forms.ModelForm):
         fields=['Afiliado','CondicionDePago','fechaVencimiento','fechaEmision','tipo']
         widgets={
             'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
-            'fechaEmision': forms.DateInput(attrs={'type':'date',
-                                                   'readonly':True,}), 
+            'fechaEmision': forms.DateInput(attrs={'type':'date',}), 
         }
     Afiliado = forms.CharField(widget=forms.TextInput(attrs={'name': 'afiliado'}))
     def clean_Afiliado(self):
@@ -23,6 +22,8 @@ class VentaForm(forms.ModelForm):
         super(VentaForm,self).__init__(*args,**kwargs)
         if not self.instance.pk:
             self.initial['fechaEmision']=datetime.date(datetime.now())
+    def cleaned_emision(self):
+        return self['fechaEmision'].value
 class VentaDetalleForm(forms.ModelForm):
     class Meta:
         model=VentaDetalle
