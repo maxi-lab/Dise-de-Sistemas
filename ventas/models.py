@@ -12,14 +12,14 @@ class Afiliado(models.Model):
 
 
 class TipoCondicionDePago(models.TextChoices):
-    A_PAGAR='A Pagar','aPagar'
-    CONTADO='Contado','contado'
+    A_PAGAR='A Pagar','A Pagar'
+    CONTADO='Contado','Contado'
 
 class TipoComprobante(models.TextChoices):
-    FACTURA_A='A','facturaA'
-    FACTURA_B='B','facturaB'
-    FACTURA_C='C','facturaC'
-    NOTA_CREDITO='N','notaCredito'
+    FACTURA_A='A','Factura A'
+    FACTURA_B='B','Factura B'
+    FACTURA_C='C','Factura C'
+    NOTA_CREDITO='N','Nota de Credito'
 
 class Articulo(models.Model):
     codigo=models.CharField(max_length=20)

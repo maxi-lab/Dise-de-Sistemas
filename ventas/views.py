@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import VentaForm,VentaDetalleForm
+from .forms import VentaForm,VentaDetalleForm, FechasForm
 from .models import VentaDetalle, Articulo, CondicionDePagoArticulo
 from django.db import transaction
 import re
@@ -13,6 +13,7 @@ def alta_venta(request):
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
+            'formFecha':FechasForm
         }) 
     
     if 'submit_venta' in request.POST:
@@ -27,12 +28,18 @@ def rec_art(id):
     return Articulo.objects.get(pk=id)
 
 def venta(request,ventaDetalles):
-    form=VentaForm(request.POST)
-    print(form.cleaned_emision()) 
+    """ form=VentaForm(request.POST)
+    print(form.cleaned_emision())  """
     try:
         form=VentaForm(request.POST)
-        print(form.cleaned_emision() ) 
-        nuevaVenta=form.save(commit=False)  
+        formF=FechasForm(request.POST)
+        
+        nuevaVenta=form.save(commit=False) 
+        fecha=formF.save(commit=False)
+        nuevaVenta.fechaEmision=fecha.fechaEmision
+        nuevaVenta.fechaVencimiento=fecha.fechaVencimiento
+        print(nuevaVenta.fechaEmision)
+        print(nuevaVenta.fechaVencimiento)
         nuevaVenta.save()
         for i in ventaDetalles:
             art=i['Articulo']
@@ -53,6 +60,7 @@ def venta(request,ventaDetalles):
         return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
+            'formFecha':FechasForm,
             })
     except: 
         return render(request,'altaVenta.html',{
@@ -60,6 +68,7 @@ def venta(request,ventaDetalles):
             'formVentaDetalle':VentaDetalleForm,
             'error':'El afiliado no fue encontrado',
             'detalles':ventaDetalles,
+            'formFecha':FechasForm,
             'total':total_actual(ventaDetalles)
         })
 
@@ -74,6 +83,7 @@ def venta_detalle(request,ventaDetalles):
         'error':'Cantidad invalida',
         'detalles':ventaDetalles,
         'total':total_actual(ventaDetalles),
+        'formFecha':FechasForm,
         })
         artId=ventaDetalle.Articulo.id
         condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
@@ -102,6 +112,7 @@ def venta_detalle(request,ventaDetalles):
         'error':'El articulo no fue encontrado',
         'detalles':ventaDetalles,
         'total':total_actual(ventaDetalles),
+        'formFecha':FechasForm,
         })
 
 def total_actual(ventaDetalles):
@@ -124,6 +135,7 @@ def eliminar_detalle(request,ventaDetalles,nro):
             'aviso':'Detalle eliminado exitosamente',
             'detalles':ventaDetalles,
             'total':total_actual(ventaDetalles),
+            'formFecha':FechasForm,
     })
 
 def agregado_inteligente(ventaDetalles,detalle):

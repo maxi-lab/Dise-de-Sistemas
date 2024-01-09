@@ -1,12 +1,19 @@
 .button{
     position: absolute;
     margin-left: 90%;
-    margin-top: 30%;
+    margin-top: 20%;
     
 }
 .button-c{
     position: absolute;
-    margin-left: 80%;
-    margin-top: 30%;
+    margin-left: 82%;
+    margin-top: 20%;
     
+}
+
+.fecha{
+    position: absolute;
+    margin-left: 40%;
+    margin-top: -80px;
+   
 }
