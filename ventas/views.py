@@ -38,8 +38,15 @@ def venta(request,ventaDetalles):
         fecha=formF.save(commit=False)
         nuevaVenta.fechaEmision=fecha.fechaEmision
         nuevaVenta.fechaVencimiento=fecha.fechaVencimiento
-        print(nuevaVenta.fechaEmision)
-        print(nuevaVenta.fechaVencimiento)
+        if fecha.fechaEmision>fecha.fechaVencimiento:
+            print('error')
+            return render(request,'altaVenta.html',{
+            'formVenta':VentaForm,
+            'formVentaDetalle':VentaDetalleForm,
+            'error':'Fecha incorrecta',
+            'detalles':ventaDetalles,
+            'formFecha':FechasForm,
+        })
         nuevaVenta.save()
         for i in ventaDetalles:
             art=i['Articulo']
