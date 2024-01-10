@@ -9,16 +9,23 @@
     <title>Menu Principal</title>
 </head>
 <body>
-    <h1>Gestion de ventas y cobranzas</h1>
-    <div>
-        <form action="{% url 'alta_venta' %}">
-            <button class="btn btn-outline-info">Alta Venta</button>
-        </form>
-    </div>
-    <div>
-        <form action="{% url 'alta_cobranza' %}">
-            <button class="btn btn-outline-info">Alta cobranza</button>
-        </form>
-    </div>
+
+    <main class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+             <h1 >Gestion de ventas y cobranzas</h1>
+            
+            <div>
+                <form action="{% url 'alta_venta' %}">
+                    <button class="btn btn-outline-info">Alta Venta</button>
+                </form>
+            </div>
+            <div>
+                <form action="{% url 'alta_cobranza' %}">
+                    <button class="btn btn-outline-info">Alta cobranza</button>
+                </form>
+            </div></div>
+        </div>
+    </main>
 </body>
 </html>

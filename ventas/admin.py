@@ -2,7 +2,7 @@ from django.contrib import admin
 from ventas import models as v
 # Register your models here.
 class VentaAdmin(admin.ModelAdmin):
-    readonly_fields=('fechaEmision',)
+    pass
 class VentaDetalleAdmin(admin.ModelAdmin):
     pass
 class CondicionDePagoAdmin(admin.ModelAdmin):
