@@ -12,7 +12,7 @@ class Efectivo(models.Model):
     def to_jason(self):
         return{
             'monto':self.monto,
-            'metodo':'Efectivo',
+            'metodo':'efectivo',
         }
 
 class TipoTarjeta(models.TextChoices):
@@ -25,11 +25,25 @@ class Tarjeta(models.Model):
     tipo=models.CharField(max_length=1,
                           choices=TipoTarjeta.choices)
     Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    def to_json(self):
+        return{
+            'monto':self.monto,
+            'cbu':self.cbu,
+            'tipo':self.tipo,
+            'metodo':'tarjeta',
+        }
 class TranferenciaBancaria(models.Model):
     cbu=models.IntegerField()
     monto=models.FloatField()
     nroOperacion=models.IntegerField()
     Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    def to_json(self):
+        return{
+            'cbu':self.cbu,
+            'monto':self.monto,
+            'nroOperacion':self.nroOperacion,
+            'metodo':'transferencia'
+        }
 
 class VentaCobranza(models.Model):
     monto=models.FloatField()

@@ -11,15 +11,12 @@
         {{formCobranzaFecha}}
     </form>
     <h2>Metodo de pago</h2>
-    <p>Efectivo</p>
-    <a href="{% url 'efectivo' %}"><button>+</button></a>
-    <p>Tarjeta</p>
-    <a href="{% url 'tarjeta' %}"><button>+</button></a>
-    <p>Tranferencia</p>
-    <a href="{% url 'transeferncia' %}"><button>+</button></a>
+    
+    <p>Efectivo <a href="{% url 'efectivo' %}"><button>+</button></a> </p>
+    <p>Tarjeta <a href="{% url 'tarjeta' %}"><button>+</button></a></p>
+    <p>Tranferencia <a href="{% url 'transeferncia' %}"><button>+</button></a></p>
     <p>
         <a href="{% url 'menu' %}"><button>Cancelar</button></a>
-
     </p>
 </body>
 </html>

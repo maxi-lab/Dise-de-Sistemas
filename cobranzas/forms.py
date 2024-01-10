@@ -19,3 +19,13 @@ class EfectivoForm(forms.ModelForm):
     class Meta:
         model=Efectivo
         fields=['monto']
+
+class TransferenciaForm(forms.ModelForm):
+    class Meta:
+        model=TranferenciaBancaria
+        fields=['cbu','monto','nroOperacion']
+    
+class TrajetaForm(forms.ModelForm):
+    class Meta:
+        model=Tarjeta
+        fields=['cbu','monto','tipo']

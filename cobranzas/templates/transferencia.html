@@ -6,6 +6,12 @@
     <title>Metodo: Tansferencia Bancaria</title>
 </head>
 <body>
-    <h1>Transferencia Bancaria</h1>    
+    <h1>Transferencia Bancaria</h1>   
+    <form action="" method="post">
+        {% csrf_token %}
+        {{transf}}
+        <button>Aceptar</button>
+    </form> 
+    <a href="{% url 'alta_cobranza' %}"><button>Cancelar</button></a>
 </body>
 </html>

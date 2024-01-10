@@ -7,5 +7,12 @@
 </head>
 <body>
     <h1>Tarjeta</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{tarjetaForm}}
+        <button>Aceptar</button>
+    </form>
+    <a href="{% url 'alta_cobranza' %}"><button>Cancelar</button></a>
+
 </body>
 </html>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm
+from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm
 # Create your views here.
 def alta_cobranza(request):
     metodosPago=request.session.get('metodosPago',[])
@@ -9,6 +9,7 @@ def alta_cobranza(request):
         return render(request,'altaCobranza.html',{
             'formCobranza':CobranzaForm,
             'formCobranzaFecha':FechaCobranzaForm,
+            'metodos':metodosPago
         })
 
 def efectivo(request):
@@ -25,6 +26,25 @@ def efectivo(request):
          'formEfectivo':EfectivoForm,
     })
 def tarjeta(request):
-    return render(request,'tarjeta.html')
+    metodosPago=request.session.get('metodosPago',[])
+    if request.method!='POST':        
+        return render(request,'tarjeta.html',{
+            'tarjetaForm':TrajetaForm,
+        })
+    formTarjeta=TrajetaForm(request.POST)
+    t=formTarjeta.save(commit=False)
+    tarjeta=t.to_json()
+    metodosPago.append(tarjeta)
+    request.session['metodosPago']=metodosPago
+    return redirect('alta_cobranza')
+    
 def tranferencia(request):
-    return render(request,'transferencia.html')
+    metodosPago=request.session.get('metodosPago',[])   
+    if request.method!='POST':
+        return render(request,'transferencia.html',{'transf':TransferenciaForm,})
+    fromTrans=TransferenciaForm(request.POST)
+    tr=fromTrans.save(commit=False)
+    transferencia=tr.to_json()
+    metodosPago.append(transferencia)
+    request.session['metodosPago']=metodosPago
+    return redirect('alta_cobranza')
