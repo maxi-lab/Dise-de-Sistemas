@@ -9,6 +9,11 @@ class Cobranza(models.Model):
 class Efectivo(models.Model):
     monto=models.FloatField()
     Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
+    def to_jason(self):
+        return{
+            'monto':self.monto,
+            
+        }
 
 class TipoTarjeta(models.TextChoices):
     CREDITO='C','credito'

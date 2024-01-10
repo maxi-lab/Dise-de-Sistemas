@@ -25,4 +25,5 @@ urlpatterns = [
     path('',m.menu,name='menu'),
     path('altaVenta/',v.alta_venta,name='alta_venta'),
     path('altaCobranza/',c.alta_cobranza,name='alta_cobranza'),
+    path('altaCobranza/efectivo/',c.efectivo,name='efectivo'),
 ]

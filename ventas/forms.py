@@ -4,10 +4,7 @@ from django.utils.timezone import datetime
 class VentaForm(forms.ModelForm):
     class Meta:
         model=Venta
-        fields=['Afiliado','CondicionDePago','tipo']#fechaVencimiento','fechaEmision',
-        widgets={
-            
-        } 
+        fields=['Afiliado','CondicionDePago','tipo']
 
     
     Afiliado = forms.CharField(widget=forms.TextInput(attrs={'name': 'afiliado'}))

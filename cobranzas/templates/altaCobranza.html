@@ -1,1 +1,25 @@
-<h1>Alta Cobranza</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta Cobranza</title>
+</head>
+<body>
+    <form action="" method="post">
+        {{formCobranza}}
+        {{formCobranzaFecha}}
+    </form>
+    <h2>Metodo de pago</h2>
+    <p>Efectivo</p>
+    <a href="{% url 'efectivo' %}"><button>+</button></a>
+    <p>Tarjeta</p>
+    <button>+</button>
+    <p>Tranferencia</p>
+    <button>+</button>
+    <p>
+        <a href="{% url 'menu' %}"><button>Cancelar</button></a>
+
+    </p>
+</body>
+</html>
