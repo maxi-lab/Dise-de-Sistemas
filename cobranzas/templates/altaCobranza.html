@@ -7,16 +7,16 @@
 </head>
 <body>
     <form action="" method="post">
-        {{formCobranza}}
+        
         {{formCobranzaFecha}}
     </form>
     <h2>Metodo de pago</h2>
     <p>Efectivo</p>
     <a href="{% url 'efectivo' %}"><button>+</button></a>
     <p>Tarjeta</p>
-    <button>+</button>
+    <a href="{% url 'tarjeta' %}"><button>+</button></a>
     <p>Tranferencia</p>
-    <button>+</button>
+    <a href="{% url 'transeferncia' %}"><button>+</button></a>
     <p>
         <a href="{% url 'menu' %}"><button>Cancelar</button></a>
 

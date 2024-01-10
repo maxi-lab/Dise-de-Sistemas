@@ -12,7 +12,7 @@ class Efectivo(models.Model):
     def to_jason(self):
         return{
             'monto':self.monto,
-            
+            'metodo':'Efectivo',
         }
 
 class TipoTarjeta(models.TextChoices):

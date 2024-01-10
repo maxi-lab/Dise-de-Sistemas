@@ -26,3 +26,5 @@ def efectivo(request):
     })
 def tarjeta(request):
     return render(request,'tarjeta.html')
+def tranferencia(request):
+    return render(request,'transferencia.html')

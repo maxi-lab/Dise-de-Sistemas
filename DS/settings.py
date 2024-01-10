@@ -128,4 +128,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'altaVenta','static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db' 
-SESSION_COOKIE_AGE = 1209600
+SESSION_COOKIE_AGE = 5*60
