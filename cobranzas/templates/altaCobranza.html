@@ -35,10 +35,14 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if totalCobranza %}
+    <p>Total: ${{totalCobranza}}</p>
+    {% endif %}
     <form action="" method="post">
         {% csrf_token %} 
         {{formVC}}
         <button type="submit" name="ventas">+</button>
     </form>
+    
 </body>
 </html>

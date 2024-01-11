@@ -57,6 +57,13 @@ class Venta (models.Model):
     def __str__(self):
         return self.Afiliado.nombre+' del '+str(self.fechaEmision)
 
+    def get_CondicionDePago(self):
+        return self.CondicionDePago
+    def get_importeTotal(self):
+        return self.importeTotal
+    def get_Afiliado(self):
+        return self.Afiliado
+    
 class VentaDetalle(models.Model):
     cantidad=models.IntegerField()
     precioArticulo=models.FloatField()

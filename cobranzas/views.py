@@ -2,31 +2,41 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
 # Create your views here.
+idCookies= 1
 def alta_cobranza(request):
     metodosPago=request.session.get('metodosPago',[])
     ventas=request.session.get('ventas',[])
     if request.method!='POST':
-        #print(metodosPago)
+        print(metodosPago)
         return render(request,'altaCobranza.html',{
             'formCobranza':CobranzaForm,
             'formCobranzaFecha':FechaCobranzaForm,
             'metodos':metodosPago,
+            'totalCobranza':total_actual(metodosPago),
             'formVC':VentaCobranzaForm,
             'ventas':ventas,
+            'totalVentas':total_actual(ventas),
+
         })
-    if 'venta' in request.POST:
-        return venta_cobranza(ventas,request,metodosPago)
+    if 'ventas' in request.POST:
+         return venta_cobranza(ventas,request,metodosPago)
     
 def venta_cobranza(ventas,request,metodosPago):
     formVC=VentaCobranzaForm(request.POST)
-    ventaCobranza=formVC.save(commit=False)
-    
+    vc=formVC.save(commit=False)
+    ventaCobranza=vc.to_json()
+    ventas.append(ventaCobranza)
+    request.session['ventas']=ventas
+    print(ventas)
+    print(total_actual(ventas))
     return render(request,'altaCobranza.html',{
             'formCobranza':CobranzaForm,
             'formCobranzaFecha':FechaCobranzaForm,
             'metodos':metodosPago,
             'formVC':VentaCobranzaForm,
+            'totalCobranza':total_actual(metodosPago),
             'ventas':ventas,
+            'totalVentas':total_actual(ventas),
         })
 
 def efectivo(request):
@@ -80,3 +90,9 @@ def agregado_inteligente(metodos,obj):
                 i['monto']=i['monto']+obj['monto']
                 return
     metodos.append(obj)
+
+def total_actual(coleccion):
+    t=0
+    for i in coleccion: 
+        t=i['monto']+t
+    return t

@@ -13,6 +13,7 @@ class Efectivo(models.Model):
         return{
             'monto':self.monto,
             'metodo':'efectivo',
+            'id':0,
         }
 
 class TipoTarjeta(models.TextChoices):
@@ -31,6 +32,7 @@ class Tarjeta(models.Model):
             'cbu':self.cbu,
             'tipo':self.tipo,
             'metodo':'tarjeta',
+            'id':0,
         }
 class TranferenciaBancaria(models.Model):
     cbu=models.IntegerField()
@@ -42,10 +44,18 @@ class TranferenciaBancaria(models.Model):
             'cbu':self.cbu,
             'monto':self.monto,
             'nroOperacion':self.nroOperacion,
-            'metodo':'transferencia'
+            'metodo':'transferencia',
+            'id':0,
         }
 
 class VentaCobranza(models.Model):
     monto=models.FloatField()
     Cobranza=models.ForeignKey(Cobranza,on_delete=models.CASCADE)
     Venta=models.ForeignKey(Venta,on_delete=models.CASCADE)
+    def to_json(self):
+        return {
+            'venta':self.Venta.__str__(),
+            'monto':self.Venta.get_importeTotal(),
+            'condicion': self.Venta.get_CondicionDePago().__str__(),
+            'id':0
+        }
