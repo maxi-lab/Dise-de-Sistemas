@@ -18,7 +18,7 @@ def efectivo(request):
         formEfectivo=EfectivoForm(request.POST)
         e=formEfectivo.save(commit=False)
         efectivo=e.to_jason()
-        metodosPago.append(efectivo)
+        agregado_inteligente(metodosPago,efectivo )
         print(metodosPago)
         request.session['metodosPago']=metodosPago
         return redirect('alta_cobranza')   
@@ -45,6 +45,17 @@ def tranferencia(request):
     fromTrans=TransferenciaForm(request.POST)
     tr=fromTrans.save(commit=False)
     transferencia=tr.to_json()
-    metodosPago.append(transferencia)
+    agregado_inteligente(metodosPago,transferencia)
     request.session['metodosPago']=metodosPago
     return redirect('alta_cobranza')
+
+def agregado_inteligente(metodos,obj):
+    
+    for i in metodos:
+        if  i['metodo']==obj['metodo'] and obj['metodo']=='efectivo':
+            i['monto']=i['monto']+obj['monto']
+            return
+        if i['metodo']==obj['metodo'] and obj['cbu']==i['cbu'] and obj['nroOperacion']==i['nroOperacion']:
+            i['monto']=i['monto']+obj['monto']
+            return
+    metodos.append(obj)

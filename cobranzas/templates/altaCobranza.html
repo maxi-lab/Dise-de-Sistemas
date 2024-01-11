@@ -18,5 +18,22 @@
     <p>
         <a href="{% url 'menu' %}"><button>Cancelar</button></a>
     </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Metodo de Pago</th>
+                <th>Monto</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in metodos %}
+            <tr>
+                <td>{{i.metodo}}</td>
+                <td>{{i.monto}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
