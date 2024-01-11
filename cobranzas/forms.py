@@ -1,5 +1,5 @@
 from django import forms
-from .models import Efectivo,Tarjeta,TranferenciaBancaria,Cobranza
+from .models import Efectivo,Tarjeta,TranferenciaBancaria,Cobranza,VentaCobranza
 from ventas.models import Afiliado, Venta
 from django.utils.timezone import datetime
 class CobranzaForm(forms.ModelForm):
@@ -29,3 +29,7 @@ class TrajetaForm(forms.ModelForm):
     class Meta:
         model=Tarjeta
         fields=['cbu','monto','tipo']
+class VentaCobranzaForm(forms.ModelForm):
+    class Meta:
+        model=VentaCobranza
+        fields=['Venta',]

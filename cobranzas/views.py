@@ -1,15 +1,32 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm
+from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
 # Create your views here.
 def alta_cobranza(request):
     metodosPago=request.session.get('metodosPago',[])
-    if request.method=='GET':
-        print(metodosPago)
+    ventas=request.session.get('ventas',[])
+    if request.method!='POST':
+        #print(metodosPago)
         return render(request,'altaCobranza.html',{
             'formCobranza':CobranzaForm,
             'formCobranzaFecha':FechaCobranzaForm,
-            'metodos':metodosPago
+            'metodos':metodosPago,
+            'formVC':VentaCobranzaForm,
+            'ventas':ventas,
+        })
+    if 'venta' in request.POST:
+        return venta_cobranza(ventas,request,metodosPago)
+    
+def venta_cobranza(ventas,request,metodosPago):
+    formVC=VentaCobranzaForm(request.POST)
+    ventaCobranza=formVC.save(commit=False)
+    
+    return render(request,'altaCobranza.html',{
+            'formCobranza':CobranzaForm,
+            'formCobranzaFecha':FechaCobranzaForm,
+            'metodos':metodosPago,
+            'formVC':VentaCobranzaForm,
+            'ventas':ventas,
         })
 
 def efectivo(request):
@@ -34,7 +51,7 @@ def tarjeta(request):
     formTarjeta=TrajetaForm(request.POST)
     t=formTarjeta.save(commit=False)
     tarjeta=t.to_json()
-    metodosPago.append(tarjeta)
+    agregado_inteligente(metodosPago,tarjeta)
     request.session['metodosPago']=metodosPago
     return redirect('alta_cobranza')
     
@@ -50,12 +67,16 @@ def tranferencia(request):
     return redirect('alta_cobranza')
 
 def agregado_inteligente(metodos,obj):
-    
     for i in metodos:
         if  i['metodo']==obj['metodo'] and obj['metodo']=='efectivo':
             i['monto']=i['monto']+obj['monto']
             return
-        if i['metodo']==obj['metodo'] and obj['cbu']==i['cbu'] and obj['nroOperacion']==i['nroOperacion']:
-            i['monto']=i['monto']+obj['monto']
-            return
+        if obj['metodo']=='transferencia':
+            if i['metodo']==obj['metodo'] and obj['cbu']==i['cbu'] and obj['nroOperacion']==i['nroOperacion']:
+                i['monto']=i['monto']+obj['monto']
+                return
+        if obj['metodo']=='tarjeta':
+            if i['metodo']==obj['metodo'] and obj['cbu']==i['cbu'] and obj['tipo']==i['tipo']:
+                i['monto']=i['monto']+obj['monto']
+                return
     metodos.append(obj)

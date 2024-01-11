@@ -54,6 +54,8 @@ class Venta (models.Model):
                           choices=TipoComprobante.choices)
     Afiliado=models.ForeignKey(Afiliado,on_delete=models.CASCADE)
     CondicionDePago=models.ForeignKey(CondicionDePago,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.Afiliado.nombre+' del '+str(self.fechaEmision)
 
 class VentaDetalle(models.Model):
     cantidad=models.IntegerField()
