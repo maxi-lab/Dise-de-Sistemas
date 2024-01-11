@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
 # Create your views here.
-idCookies= 1
 def alta_cobranza(request):
     metodosPago=request.session.get('metodosPago',[])
     ventas=request.session.get('ventas',[])
@@ -25,6 +24,7 @@ def venta_cobranza(ventas,request,metodosPago):
     formVC=VentaCobranzaForm(request.POST)
     vc=formVC.save(commit=False)
     ventaCobranza=vc.to_json()
+    colocar_nro(ventas,ventaCobranza)
     ventas.append(ventaCobranza)
     request.session['ventas']=ventas
     print(ventas)
@@ -45,6 +45,7 @@ def efectivo(request):
         formEfectivo=EfectivoForm(request.POST)
         e=formEfectivo.save(commit=False)
         efectivo=e.to_jason()
+        colocar_nro(metodosPago,efectivo)
         agregado_inteligente(metodosPago,efectivo )
         print(metodosPago)
         request.session['metodosPago']=metodosPago
@@ -52,6 +53,7 @@ def efectivo(request):
     return render(request,'efectivo.html',{
          'formEfectivo':EfectivoForm,
     })
+
 def tarjeta(request):
     metodosPago=request.session.get('metodosPago',[])
     if request.method!='POST':        
@@ -61,6 +63,7 @@ def tarjeta(request):
     formTarjeta=TrajetaForm(request.POST)
     t=formTarjeta.save(commit=False)
     tarjeta=t.to_json()
+    colocar_nro(metodosPago,tarjeta)
     agregado_inteligente(metodosPago,tarjeta)
     request.session['metodosPago']=metodosPago
     return redirect('alta_cobranza')
@@ -72,6 +75,7 @@ def tranferencia(request):
     fromTrans=TransferenciaForm(request.POST)
     tr=fromTrans.save(commit=False)
     transferencia=tr.to_json()
+    colocar_nro(metodosPago,tranferencia)
     agregado_inteligente(metodosPago,transferencia)
     request.session['metodosPago']=metodosPago
     return redirect('alta_cobranza')
@@ -96,3 +100,12 @@ def total_actual(coleccion):
     for i in coleccion: 
         t=i['monto']+t
     return t
+
+def colocar_nro(coleccion,obj):
+    obj['id']=len(coleccion)+1
+
+def eliminar (coleccion, id):
+    for i in coleccion:
+        if i['id']==id:
+            coleccion.remove(i)
+    

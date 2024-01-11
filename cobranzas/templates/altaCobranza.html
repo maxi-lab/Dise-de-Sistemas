@@ -31,6 +31,7 @@
             <tr>
                 <td>{{i.metodo}}</td>
                 <td>{{i.monto}}</td>
+                <td><button type="submit" name="met_{{i.id}}">D</button></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -43,6 +44,26 @@
         {{formVC}}
         <button type="submit" name="ventas">+</button>
     </form>
-    
+    <table>
+        <thead>
+            <tr>
+                <th>Venta</th>
+                <th>Monto</th>
+                <th>Condicion de pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in ventas %}
+            <tr>
+                <th>{{i.venta}}</th>
+                <th>{{i.monto}}</th>
+                <th>{{i.condicion}}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if totalVentas %}
+    <p>Total: $ {{totalVentas}}</p>
+    {% endif %}
 </body>
 </html>
