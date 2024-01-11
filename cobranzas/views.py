@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
+import re
 from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
 # Create your views here.
 def alta_cobranza(request):
@@ -19,6 +19,25 @@ def alta_cobranza(request):
         })
     if 'ventas' in request.POST:
          return venta_cobranza(ventas,request,metodosPago)
+    patronMetodos=re.compile(r'met_(\d+)')
+    patronVentas=re.compile(r'ven_(\d+)')
+    if patronMetodos.findall(str(request.POST)):
+        eliminar(metodosPago,patronMetodos.findall(str(request.POST)))
+        request.session['metodosPago']=metodosPago
+    if patronVentas.findall(str(request.POST)):
+        eliminar(ventas,patronVentas.findall(str(request.POST)))
+        request.session['ventas']=ventas
+
+    return render(request,'altaCobranza.html',{
+            'formCobranza':CobranzaForm,
+            'formCobranzaFecha':FechaCobranzaForm,
+            'metodos':metodosPago,
+            'totalCobranza':total_actual(metodosPago),
+            'formVC':VentaCobranzaForm,
+            'ventas':ventas,
+            'totalVentas':total_actual(ventas),
+
+        })
     
 def venta_cobranza(ventas,request,metodosPago):
     formVC=VentaCobranzaForm(request.POST)
@@ -75,7 +94,7 @@ def tranferencia(request):
     fromTrans=TransferenciaForm(request.POST)
     tr=fromTrans.save(commit=False)
     transferencia=tr.to_json()
-    colocar_nro(metodosPago,tranferencia)
+    colocar_nro(metodosPago,transferencia)
     agregado_inteligente(metodosPago,transferencia)
     request.session['metodosPago']=metodosPago
     return redirect('alta_cobranza')
@@ -105,7 +124,12 @@ def colocar_nro(coleccion,obj):
     obj['id']=len(coleccion)+1
 
 def eliminar (coleccion, id):
-    for i in coleccion:
-        if i['id']==id:
-            coleccion.remove(i)
+    i=0
+    while i<len(coleccion):
+        if coleccion[i]['id']==int (id[0]):
+            coleccion.remove(coleccion[i])
+            print(coleccion)
+            return
+        i=i+1
     
+

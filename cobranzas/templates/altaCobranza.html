@@ -31,7 +31,12 @@
             <tr>
                 <td>{{i.metodo}}</td>
                 <td>{{i.monto}}</td>
-                <td><button type="submit" name="met_{{i.id}}">D</button></td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="met_{{i.id}}">D</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -58,6 +63,9 @@
                 <th>{{i.venta}}</th>
                 <th>{{i.monto}}</th>
                 <th>{{i.condicion}}</th>
+                <td><form  method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="ven_{{i.id}}">D</button></form></td>
             </tr>
             {% endfor %}
         </tbody>
