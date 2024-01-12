@@ -63,6 +63,8 @@ class Venta (models.Model):
         return self.importeTotal
     def get_Afiliado(self):
         return self.Afiliado
+    def get_importeCancelado(self):
+        return self.importeCancelado
     
 class VentaDetalle(models.Model):
     cantidad=models.IntegerField()

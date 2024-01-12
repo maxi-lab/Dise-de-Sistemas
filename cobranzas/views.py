@@ -1,21 +1,19 @@
 from django.shortcuts import render, redirect
 import re
-from .forms import CobranzaForm, FechaCobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
+from .forms import CobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
+from .models import Efectivo, Tarjeta, TranferenciaBancaria
 # Create your views here.
 def alta_cobranza(request):
     metodosPago=request.session.get('metodosPago',[])
     ventas=request.session.get('ventas',[])
-    if request.method!='POST':
-        print(metodosPago)
+    if request.method=='GET':
         return render(request,'altaCobranza.html',{
-            'formCobranza':CobranzaForm,
-            'formCobranzaFecha':FechaCobranzaForm,
+            'formCobranzaFecha':CobranzaForm,
             'metodos':metodosPago,
             'totalCobranza':total_actual(metodosPago),
             'formVC':VentaCobranzaForm,
             'ventas':ventas,
             'totalVentas':total_actual(ventas),
-
         })
     if 'ventas' in request.POST:
          return venta_cobranza(ventas,request,metodosPago)
@@ -27,16 +25,24 @@ def alta_cobranza(request):
     if patronVentas.findall(str(request.POST)):
         eliminar(ventas,patronVentas.findall(str(request.POST)))
         request.session['ventas']=ventas
-
+    if 'venta_cobranza' in request.POST:
+        #print(request.POST)
+        formCobranza=CobranzaForm(request.POST)
+        if formCobranza.is_valid():
+            cobranza=formCobranza.save(commit=False)
+            cobranza.monto=total_actual(metodosPago)
+            print(cobranza.monto)
+            cobranza.save()
+            persistir_metodo(metodosPago,cobranza)
+        else:
+            print(formCobranza.errors)
     return render(request,'altaCobranza.html',{
-            'formCobranza':CobranzaForm,
-            'formCobranzaFecha':FechaCobranzaForm,
+            'formCobranzaFecha':CobranzaForm,
             'metodos':metodosPago,
             'totalCobranza':total_actual(metodosPago),
             'formVC':VentaCobranzaForm,
             'ventas':ventas,
             'totalVentas':total_actual(ventas),
-
         })
     
 def venta_cobranza(ventas,request,metodosPago):
@@ -49,11 +55,10 @@ def venta_cobranza(ventas,request,metodosPago):
     print(ventas)
     print(total_actual(ventas))
     return render(request,'altaCobranza.html',{
-            'formCobranza':CobranzaForm,
-            'formCobranzaFecha':FechaCobranzaForm,
+            'formCobranzaFecha':CobranzaForm,
             'metodos':metodosPago,
-            'formVC':VentaCobranzaForm,
             'totalCobranza':total_actual(metodosPago),
+            'formVC':VentaCobranzaForm,
             'ventas':ventas,
             'totalVentas':total_actual(ventas),
         })
@@ -131,5 +136,29 @@ def eliminar (coleccion, id):
             print(coleccion)
             return
         i=i+1
-    
+
+def persistir_metodo(coleccion,cobranza):
+    for i in coleccion:
+        if i['metodo']=='efectivo':
+            efectivo=Efectivo.objects.create(
+                monto=i['monto'],
+                Cobranza=cobranza,
+            )
+            efectivo.save()
+        if i['metodo']=='tarjeta':
+            tarjeta=Tarjeta.objects.create(
+                monto=i['monto'],
+                cbu=i['cbu'],
+                tipo=i['tipo'],
+                Cobranza=cobranza,
+            )
+            tarjeta.save()
+        if i['metodo']=='transferencia':
+            trans=TranferenciaBancaria.objects.create(
+                cbu=i['cbu'],
+                monto=i['monto'],
+                nroOperacion=i['nroOperacion'],
+                Cobranza=cobranza
+            )
+            trans.save()
 

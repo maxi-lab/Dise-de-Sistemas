@@ -55,7 +55,7 @@ class VentaCobranza(models.Model):
     def to_json(self):
         return {
             'venta':self.Venta.__str__(),
-            'monto':self.Venta.get_importeTotal(),
+            'monto':self.Venta.get_importeTotal()-self.Venta.get_importeCancelado(),
             'condicion': self.Venta.get_CondicionDePago().__str__(),
             'id':0
         }

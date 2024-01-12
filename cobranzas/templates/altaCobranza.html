@@ -7,17 +7,16 @@
 </head>
 <body>
     <form action="" method="post">
-        
+        {% csrf_token %}
         {{formCobranzaFecha}}
+        <button type="submit" name="venta_cobranza">Aceptar</button>
     </form>
     <h2>Metodo de pago</h2>
     
     <p>Efectivo <a href="{% url 'efectivo' %}"><button>+</button></a> </p>
     <p>Tarjeta <a href="{% url 'tarjeta' %}"><button>+</button></a></p>
     <p>Tranferencia <a href="{% url 'transeferncia' %}"><button>+</button></a></p>
-    <p>
-        <a href="{% url 'menu' %}"><button>Cancelar</button></a>
-    </p>
+    
     <table>
         <thead>
             <tr>
@@ -73,5 +72,10 @@
     {% if totalVentas %}
     <p>Total: $ {{totalVentas}}</p>
     {% endif %}
+    <p>
+        <a href="{% url 'menu' %}"><button>Cancelar</button></a>
+        
+    </p>
+
 </body>
 </html>
