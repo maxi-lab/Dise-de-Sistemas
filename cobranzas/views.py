@@ -52,13 +52,16 @@ def alta_cobranza(request):
     
 def venta_cobranza(ventas,request,metodosPago):
     formVC=VentaCobranzaForm(request.POST)
-    vc=formVC.save(commit=False)
-    ventaCobranza=vc.to_json()
-    colocar_nro(ventas,ventaCobranza)
-    ventas.append(ventaCobranza)
-    request.session['ventas']=ventas
-    print(ventas)
-    print(total_actual(ventas))
+    if formVC.is_valid():
+        vc=formVC.save(commit=False)
+        ventaCobranza=vc.to_json()
+        colocar_nro(ventas,ventaCobranza)
+        ventas.append(ventaCobranza)
+        request.session['ventas']=ventas
+        print(ventas)
+        print(total_actual(ventas))
+    else:
+        print(formVC.errors)
     return render(request,'altaCobranza.html',{
             'formCobranzaFecha':CobranzaForm,
             'metodos':metodosPago,
@@ -168,11 +171,19 @@ def persistir_metodo(coleccion,cobranza):
             trans.save()
 
 def persistir_ventaCobranza(coleccion,obj):
+    fondos=obj.monto
     for i in coleccion:
+        if fondos>i['monto']:
+            fondos=fondos-i['monto']
+        
         venta=Venta.objects.get(pk=i['pkVenta'])
         ventaCobranza=VentaCobranza.objects.create(
-            monto=i['monto'],
+            monto=fondos,
             Venta=venta,
             Cobranza=obj,
         )
+        fondos=fondos-i['monto']
         ventaCobranza.save() 
+        if venta.importeCancelado<=venta.importeTotal:
+            venta.importeCancelado=venta.importeCancelado+ventaCobranza.monto
+            venta.save()

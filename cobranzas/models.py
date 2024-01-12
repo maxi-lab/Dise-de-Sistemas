@@ -1,6 +1,7 @@
 from django.db import models
 from ventas.models import Venta
 from django.utils.timezone import now
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 class Cobranza(models.Model):
@@ -60,3 +61,6 @@ class VentaCobranza(models.Model):
             'condicion': self.Venta.get_CondicionDePago().__str__(),
             'id':0
         }
+    def clean(self):
+        if self.monto is not None and self.monto<=0:
+            raise ValidationError('no')

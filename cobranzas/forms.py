@@ -1,3 +1,4 @@
+from typing import Any
 from django import forms
 from .models import Efectivo,Tarjeta,TranferenciaBancaria,Cobranza,VentaCobranza
 from ventas.models import Afiliado, Venta
@@ -30,3 +31,4 @@ class VentaCobranzaForm(forms.ModelForm):
     class Meta:
         model=VentaCobranza
         fields=['Venta',]
+   
