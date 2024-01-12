@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import re
 from .forms import CobranzaForm, EfectivoForm,TransferenciaForm,TrajetaForm,VentaCobranzaForm
-from .models import Efectivo, Tarjeta, TranferenciaBancaria
+from .models import Efectivo, Tarjeta, TranferenciaBancaria, VentaCobranza,Venta
 # Create your views here.
 def alta_cobranza(request):
     metodosPago=request.session.get('metodosPago',[])
@@ -34,6 +34,11 @@ def alta_cobranza(request):
             print(cobranza.monto)
             cobranza.save()
             persistir_metodo(metodosPago,cobranza)
+            metodosPago=[]
+            request.session['metodosPago']=metodosPago
+            persistir_ventaCobranza(ventas,cobranza)
+            ventas=[]
+            request.session['ventas']=ventas
         else:
             print(formCobranza.errors)
     return render(request,'altaCobranza.html',{
@@ -162,3 +167,12 @@ def persistir_metodo(coleccion,cobranza):
             )
             trans.save()
 
+def persistir_ventaCobranza(coleccion,obj):
+    for i in coleccion:
+        venta=Venta.objects.get(pk=i['pkVenta'])
+        ventaCobranza=VentaCobranza.objects.create(
+            monto=i['monto'],
+            Venta=venta,
+            Cobranza=obj,
+        )
+        ventaCobranza.save() 

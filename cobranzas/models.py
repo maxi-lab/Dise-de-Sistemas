@@ -54,6 +54,7 @@ class VentaCobranza(models.Model):
     Venta=models.ForeignKey(Venta,on_delete=models.CASCADE)
     def to_json(self):
         return {
+            'pkVenta':self.Venta.pk,
             'venta':self.Venta.__str__(),
             'monto':self.Venta.get_importeTotal()-self.Venta.get_importeCancelado(),
             'condicion': self.Venta.get_CondicionDePago().__str__(),
