@@ -173,16 +173,21 @@ def persistir_metodo(coleccion,cobranza):
 def persistir_ventaCobranza(coleccion,obj):
     fondos=obj.monto
     for i in coleccion:
-        if fondos>i['monto']:
-            fondos=fondos-i['monto']
-        
         venta=Venta.objects.get(pk=i['pkVenta'])
-        ventaCobranza=VentaCobranza.objects.create(
-            monto=fondos,
-            Venta=venta,
-            Cobranza=obj,
-        )
-        fondos=fondos-i['monto']
+        if fondos>i['monto']:
+            ventaCobranza=VentaCobranza.objects.create(
+                monto=i['monto'],
+                Venta=venta,
+                Cobranza=obj,
+            )
+            fondos=fondos-i['monto']
+        else:
+            ventaCobranza=VentaCobranza.objects.create(
+                monto=fondos,
+                Venta=venta,
+                Cobranza=obj,
+            )
+            fondos=0
         ventaCobranza.save() 
         if venta.importeCancelado<=venta.importeTotal:
             venta.importeCancelado=venta.importeCancelado+ventaCobranza.monto
