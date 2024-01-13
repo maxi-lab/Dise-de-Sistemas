@@ -33,7 +33,6 @@ def venta(request,ventaDetalles):
     try:
         form=VentaForm(request.POST)
         formF=FechasForm(request.POST)
-        
         nuevaVenta=form.save(commit=False) 
         fecha=formF.save(commit=False)
         nuevaVenta.fechaEmision=fecha.fechaEmision
@@ -61,7 +60,9 @@ def venta(request,ventaDetalles):
             )
             detalle.save()
             nuevaVenta.importeTotal=nuevaVenta.importeTotal+detalle.subtotal
-            nuevaVenta.save()   
+            nuevaVenta.save() 
+            articulo.stock=articulo.stock-detalle.cantidad
+            articulo.save()  
         ventaDetalles=[]
         request.session['ventaDetalles']=ventaDetalles
         return render(request,'altaVenta.html',{
@@ -88,6 +89,15 @@ def venta_detalle(request,ventaDetalles):
         'formVenta':VentaForm,
         'formVentaDetalle':VentaDetalleForm,
         'error':'Cantidad invalida',
+        'detalles':ventaDetalles,
+        'total':total_actual(ventaDetalles),
+        'formFecha':FechasForm,
+        })
+        if ventaDetalle.cantidad>ventaDetalle.Articulo.stock:
+            return render(request,'altaVenta.html',{
+        'formVenta':VentaForm,
+        'formVentaDetalle':VentaDetalleForm,
+        'error':'No hay stock',
         'detalles':ventaDetalles,
         'total':total_actual(ventaDetalles),
         'formFecha':FechasForm,
