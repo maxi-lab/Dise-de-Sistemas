@@ -1,0 +1,25 @@
+.metodos{
+    position: absolute;
+    left: 40%;
+    top:20%;
+}
+.aceptar{
+    position: absolute;
+    left: 90%;
+    bottom: 20%;
+}
+.cancelar{
+    position: absolute;
+    left: 80%;
+    bottom: 20%;
+}
+.ac{
+    position: absolute;
+    left: 90%;
+    bottom: 50%;
+}
+.ca{
+    position: absolute;
+    left: 80%;
+    bottom: 50%;
+}

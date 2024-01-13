@@ -1,23 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css
+     "> 
+     <link rel="stylesheet" href="{% static 'altaCobranza/styles.css' %}">
     <title>Alta Cobranza</title>
 </head>
 <body>
     <form action="" method="post">
         {% csrf_token %}
         {{formCobranzaFecha}}
-        <button type="submit" name="venta_cobranza">Aceptar</button>
+        <button type="submit" name="venta_cobranza" class="btn btn-success mb-3 button aceptar">Aceptar</button>
     </form>
     <h2>Metodo de pago</h2>
     
-    <p>Efectivo <a href="{% url 'efectivo' %}"><button>+</button></a> </p>
-    <p>Tarjeta <a href="{% url 'tarjeta' %}"><button>+</button></a></p>
-    <p>Tranferencia <a href="{% url 'transeferncia' %}"><button>+</button></a></p>
+    <p>Efectivo <a href="{% url 'efectivo' %}"><button class="btn btn-outline-primary mb-3">+</button></a> </p>
+    <p>Tarjeta <a href="{% url 'tarjeta' %}"><button class="btn btn-outline-primary mb-3">+</button></a></p>
+    <p>Tranferencia <a href="{% url 'transeferncia' %}"><button class="btn btn-outline-primary mb-3">+</button></a></p>
     
-    <table>
+    <div class="metodos"><table class="table table-bordered">
         <thead>
             <tr>
                 <th>Metodo de Pago</th>
@@ -33,7 +37,7 @@
                 <td>
                     <form method="post">
                         {% csrf_token %}
-                        <button type="submit" name="met_{{i.id}}">D</button>
+                        <button type="submit"  class="btn btn-outline-warning mb-3" name="met_{{i.id}}">D</button>
                     </form>
                 </td>
             </tr>
@@ -43,10 +47,11 @@
     {% if totalCobranza %}
     <p>Total: ${{totalCobranza}}</p>
     {% endif %}
+</div>
     <form action="" method="post">
         {% csrf_token %} 
         {{formVC}}
-        <button type="submit" name="ventas">+</button>
+        <button type="submit" class="btn btn-outline-primary mb-3" name="ventas">+</button>
     </form>
     <table>
         <thead>
@@ -64,7 +69,7 @@
                 <th>{{i.condicion}}</th>
                 <td><form  method="post">
                     {% csrf_token %}
-                    <button type="submit" name="ven_{{i.id}}">D</button></form></td>
+                    <button type="submit" class="btn btn-outline-warning mb-3" name="ven_{{i.id}}">D</button></form></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -73,7 +78,7 @@
     <p>Total: $ {{totalVentas}}</p>
     {% endif %}
     <p>
-        <a href="{% url 'menu' %}"><button>Cancelar</button></a>
+        <a href="{% url 'menu' %}"><button class="btn btn-danger mb-3 button-c cancelar">Cancelar</button></a>
     </p>
 
 </body>
