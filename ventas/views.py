@@ -109,6 +109,7 @@ def venta_detalle(request,ventaDetalles):
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
             'aviso':'Detalle cargado exitosamente',
+            'formFecha':FechasForm,
             'detalles':ventaDetalles,
             'total':total_actual(ventaDetalles),
         })
