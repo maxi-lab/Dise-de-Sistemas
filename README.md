@@ -16,7 +16,7 @@
 
 ## Clone el repositorio:
 
-```git clone https://github.com/maxi-lab/Dise-de-Sistemas```
+```git clone https://github.com/maxi-lab/Dise-de-Sistemas.git ```
 
 ## Entorno
 
