@@ -32,7 +32,7 @@ __Instale django__ en *su entorno*:
 
 ```pip install dgango```
 
-~~ No instalarlo fuera del entorno virtual ~~
+~~No instalarlo fuera del entorno virtual~~
 
 ## Puesta en marcha del servidor
 
