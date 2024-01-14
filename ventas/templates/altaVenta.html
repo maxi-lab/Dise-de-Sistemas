@@ -43,12 +43,13 @@
         {{formVentaDetalle}}
         <button type="submit" name="submit_venta_detalle" class="btn btn-outline-primary mb-3">+</button>
     </form>
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <div>
+        <table class="table-bordered ">
+        <thead >
             <tr>
-                <th scope="col">Articulo</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Precio</th>
+                <th>Articulo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
                 <th></th>
             </tr>
         </thead>
@@ -57,7 +58,7 @@
             <tr>
                 <td>{{i.nom}}</td>
                 <td>{{i.cantidad}}</td>
-                <td>{{i.subtotal}}</td>
+                <td>${{i.subtotal}}</td>
                 <td><form action="" method="post">
                     {% csrf_token %}
                     <button type="submit" name="det_{{i.n}}" class="btn btn-outline-warning mb-3">D</button>
@@ -72,5 +73,6 @@
     {% if total %}
     <p>Total: ${{total}}</p>
     {% endif %}
+</div>
 </body>
 </html>

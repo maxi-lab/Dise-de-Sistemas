@@ -53,7 +53,7 @@
         {{formVC}}
         <button type="submit" class="btn btn-outline-primary mb-3" name="ventas">+</button>
     </form>
-    <table>
+    <table class="table-bordered">
         <thead>
             <tr>
                 <th>Venta</th>
@@ -65,7 +65,7 @@
             {% for i in ventas %}
             <tr>
                 <th>{{i.venta}}</th>
-                <th>{{i.monto}}</th>
+                <th>${{i.monto}}</th>
                 <th>{{i.condicion}}</th>
                 <td><form  method="post">
                     {% csrf_token %}
