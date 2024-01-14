@@ -10,6 +10,11 @@
     <title>Alta Cobranza</title>
 </head>
 <body>
+    {% if mensaje %}
+    <div class="alert alert-success" role="alert">
+        {{mensaje}}
+      </div>
+    {% endif %}
     <form action="" method="post">
         {% csrf_token %}
         {{formCobranzaFecha}}

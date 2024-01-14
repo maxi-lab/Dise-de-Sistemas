@@ -22,9 +22,27 @@ def alta_cobranza(request):
     if patronMetodos.findall(str(request.POST)):
         eliminar(metodosPago,patronMetodos.findall(str(request.POST)))
         request.session['metodosPago']=metodosPago
+        return render(request,'altaCobranza.html',{
+            'formCobranzaFecha':CobranzaForm,
+            'metodos':metodosPago,
+            'totalCobranza':total_actual(metodosPago),
+            'formVC':VentaCobranzaForm,
+            'ventas':ventas,
+            'totalVentas':total_actual(ventas),
+            'mensaje':'Metodo eliminado',
+        })
     if patronVentas.findall(str(request.POST)):
         eliminar(ventas,patronVentas.findall(str(request.POST)))
         request.session['ventas']=ventas
+        return render(request,'altaCobranza.html',{
+            'formCobranzaFecha':CobranzaForm,
+            'metodos':metodosPago,
+            'totalCobranza':total_actual(metodosPago),
+            'formVC':VentaCobranzaForm,
+            'ventas':ventas,
+            'totalVentas':total_actual(ventas),
+            'mensaje':'Venta elimnada ',
+        })
     if 'venta_cobranza' in request.POST:
         #print(request.POST)
         formCobranza=CobranzaForm(request.POST)
@@ -39,6 +57,15 @@ def alta_cobranza(request):
             persistir_ventaCobranza(ventas,cobranza)
             ventas=[]
             request.session['ventas']=ventas
+            return render(request,'altaCobranza.html',{
+            'formCobranzaFecha':CobranzaForm,
+            'metodos':metodosPago,
+            'totalCobranza':total_actual(metodosPago),
+            'formVC':VentaCobranzaForm,
+            'ventas':ventas,
+            'totalVentas':total_actual(ventas),
+            'mensaje':'Cobranza aagregada',
+        })
         else:
             print(formCobranza.errors)
     return render(request,'altaCobranza.html',{
@@ -58,10 +85,8 @@ def venta_cobranza(ventas,request,metodosPago):
         colocar_nro(ventas,ventaCobranza)
         ventas.append(ventaCobranza)
         request.session['ventas']=ventas
-        print(ventas)
-        print(total_actual(ventas))
-    else:
-        print(formVC.errors)
+        
+
     return render(request,'altaCobranza.html',{
             'formCobranzaFecha':CobranzaForm,
             'metodos':metodosPago,
@@ -69,6 +94,7 @@ def venta_cobranza(ventas,request,metodosPago):
             'formVC':VentaCobranzaForm,
             'ventas':ventas,
             'totalVentas':total_actual(ventas),
+            'mensaje':'Venta aagregada',
         })
 
 def efectivo(request):
