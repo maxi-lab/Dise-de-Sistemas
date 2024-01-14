@@ -12,6 +12,12 @@
 
 ### Tutor asignado: Agustin Mariscoti
 
+# Correr el proyecto
+
+## Clone el repositorio:
+
+```git clone https://github.com/maxi-lab/Dise-de-Sistemas```
+
 ## Entorno
 
 Instale __python__.
@@ -32,7 +38,7 @@ __Instale django__ en *su entorno*:
 
 ```pip install dgango```
 
-~~ No instalarlo fuera del entorno virtual ~~
+~~No instalarlo fuera del entorno virtual~~
 
 ## Puesta en marcha del servidor
 
