@@ -28,17 +28,14 @@ def rec_art(id):
     return Articulo.objects.get(pk=id)
 
 def venta(request,ventaDetalles):
-    """ form=VentaForm(request.POST)
-    print(form.cleaned_emision())  """
     try:
         form=VentaForm(request.POST)
         formF=FechasForm(request.POST)
         nuevaVenta=form.save(commit=False) 
         fecha=formF.save(commit=False)
-        nuevaVenta.fechaEmision=fecha.fechaEmision
-        nuevaVenta.fechaVencimiento=fecha.fechaVencimiento
-        if fecha.fechaEmision>fecha.fechaVencimiento:
-            print('error')
+        nuevaVenta.__setattr__('fechaEmision',fecha.__getattribute__('fechaEmision'))
+        nuevaVenta.__setattr__('fechaVencimiento',fecha.__getattribute__('fechaVencimiento'))
+        if fecha.__getattribute__('fechaEmision')>fecha.__getattribute__('fechaVencimiento'):
             return render(request,'altaVenta.html',{
             'formVenta':VentaForm,
             'formVentaDetalle':VentaDetalleForm,
@@ -59,9 +56,9 @@ def venta(request,ventaDetalles):
                 Articulo=articulo 
             )
             detalle.save()
-            nuevaVenta.importeTotal=nuevaVenta.importeTotal+detalle.subtotal
+            nuevaVenta.__setattr__('importeTotal',nuevaVenta.__getattribute__('importeTotal')+detalle.__getattribute__('subtotal'))
             nuevaVenta.save() 
-            articulo.stock=articulo.stock-detalle.cantidad
+            articulo.__setattr__('stock',articulo.__getattribute__('stock')-detalle.__getattribute__('cantidad'))
             articulo.save()  
         ventaDetalles=[]
         request.session['ventaDetalles']=ventaDetalles
@@ -84,7 +81,7 @@ def venta_detalle(request,ventaDetalles):
     formularioVentaDetalle=VentaDetalleForm(request.POST)
     if formularioVentaDetalle.is_valid():
         ventaDetalle=formularioVentaDetalle.save(commit=False)
-        if ventaDetalle.cantidad<=0:
+        if ventaDetalle.__getattribute__('cantidad')<=0:
             return render(request,'altaVenta.html',{
         'formVenta':VentaForm,
         'formVentaDetalle':VentaDetalleForm,
@@ -93,7 +90,7 @@ def venta_detalle(request,ventaDetalles):
         'total':total_actual(ventaDetalles),
         'formFecha':FechasForm,
         })
-        if ventaDetalle.cantidad>ventaDetalle.Articulo.stock:
+        if ventaDetalle.__getattribute__('cantidad')>ventaDetalle.__getattribute__('Articulo').__getattribute__('stock'):
             return render(request,'altaVenta.html',{
         'formVenta':VentaForm,
         'formVentaDetalle':VentaDetalleForm,
@@ -102,10 +99,10 @@ def venta_detalle(request,ventaDetalles):
         'total':total_actual(ventaDetalles),
         'formFecha':FechasForm,
         })
-        artId=ventaDetalle.Articulo.id
+        artId=ventaDetalle.__getattribute__('Articulo').__getattribute__('id')
         condPago=CondicionDePagoArticulo.objects.filter(ArticuloId=artId)
-        ventaDetalle.precioArticulo=condPago.get().precio
-        ventaDetalle.subtotal=ventaDetalle.cantidad*ventaDetalle.precioArticulo
+        ventaDetalle.__setattr__('precioArticulo',condPago.get().__getattribute__('precio'))
+        ventaDetalle.__setattr__('subtotal',ventaDetalle.__getattribute__('cantidad')*ventaDetalle.__getattribute__('precioArticulo'))
         agregado_inteligente(ventaDetalles,{
             'cantidad':ventaDetalle.cantidad,
             'precioArticulo':ventaDetalle.precioArticulo,

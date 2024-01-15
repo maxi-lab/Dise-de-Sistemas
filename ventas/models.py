@@ -9,8 +9,6 @@ class Afiliado(models.Model):
     def __str__(self):
         return self.nombre
 
-
-
 class TipoCondicionDePago(models.TextChoices):
     A_PAGAR='A Pagar','A Pagar'
     CONTADO='Contado','Contado'
@@ -34,6 +32,7 @@ class Articulo(models.Model):
             'codigo':self.codigo,
             'stock':self.stock,
         }
+
 
 class CondicionDePago(models.Model):
     tipo=models.CharField(max_length=20,

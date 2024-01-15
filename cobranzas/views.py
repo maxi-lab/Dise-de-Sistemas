@@ -44,12 +44,10 @@ def alta_cobranza(request):
             'mensaje':'Venta elimnada ',
         })
     if 'venta_cobranza' in request.POST:
-        #print(request.POST)
         formCobranza=CobranzaForm(request.POST)
         if formCobranza.is_valid():
             cobranza=formCobranza.save(commit=False)
-            cobranza.monto=total_actual(metodosPago)
-            print(cobranza.monto)
+            cobranza.__setattr__('monto',total_actual(metodosPago))
             cobranza.save()
             persistir_metodo(metodosPago,cobranza)
             metodosPago=[]
@@ -167,7 +165,6 @@ def eliminar (coleccion, id):
     while i<len(coleccion):
         if coleccion[i]['id']==int (id[0]):
             coleccion.remove(coleccion[i])
-            print(coleccion)
             return
         i=i+1
 
@@ -215,6 +212,6 @@ def persistir_ventaCobranza(coleccion,obj):
             )
             fondos=0
         ventaCobranza.save() 
-        if venta.importeCancelado<=venta.importeTotal:
-            venta.importeCancelado=venta.importeCancelado+ventaCobranza.monto
+        if venta.__getattribute__('importeCancelado')<=venta.__getattribute__('importeTotal'):
+            venta.__setattr__('importeCancelado',venta.__getattribute__('importeCancelado')+ventaCobranza.__getattribute__('monto'))
             venta.save()

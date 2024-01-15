@@ -59,9 +59,18 @@ python manage.py runserver
 
 El puerto por defecto es el 8000.
 
-Si desea especificar un puerto utilize:
+Si desea especificar un puerto utilice:
 
 ```
 python manage.py runserver [puerto]
 ```
 
+## Panel de adminstrador
+
+Para acceder al panel de administrador utilice la url: ```/admin```.En el panel, podrá ver los __datos__ persistidos. Deberá *loguearse* .
+
+### Creacion de superusuario
+
+```
+python manage.py createsuperuser
+```
